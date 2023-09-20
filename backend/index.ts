@@ -2,6 +2,12 @@ import express, { Express } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import {
+  handleValidationErrors,
+  loginValidation,
+  registerValidation,
+} from "./validation";
+import { UserController } from "./controllers";
 dotenv.config();
 /* Check process.env */
 const mongoDB = process.env.MONGODB_URI;
@@ -20,6 +26,19 @@ const port = 4444; /* PORT */
 
 app.use(express.json());
 app.use(cors());
+/* Users */
+app.post(
+  "/auth/login",
+  loginValidation,
+  handleValidationErrors,
+  UserController.login
+);
+app.post(
+  "/auth/register",
+  registerValidation,
+  handleValidationErrors,
+  UserController.register
+);
 
 app.listen(port, () => {
   console.log(`Server start http://localhost:${port}`);

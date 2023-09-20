@@ -1,15 +1,39 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface IUsers extends Document {
-    name: string;
-    surname: string;
-    permission: Array<string>;
-};
+export interface IUsers extends Document {
+  email: string;
+  passwordHash: string;
+  fullName: string;
+  telegram_id: string;
+  avatarUrl: string;
+  permission: Array<string>;
+}
 
-const usersSchema = new Schema<IUsers>({
-    name: String,
-    surname: String,
+const usersSchema = new Schema<IUsers>(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    passwordHash: {
+      type: String,
+      required: true,
+    },
+    fullName: {
+      type: String,
+      required: true,
+    },
+    telegram_id: {
+      type: String,
+      unique: true,
+    },
+    avatarUrl: String,
     permission: Array,
-});
+  },
+  {
+    timestamps: true,
+  }
+);
 
-export const Users = mongoose.model<IUsers>("Users", usersSchema);
+export default mongoose.model<IUsers>("Users", usersSchema);
