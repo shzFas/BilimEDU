@@ -11,6 +11,7 @@ import { UserController } from "./controllers";
 dotenv.config();
 /* Check process.env */
 const mongoDB = process.env.MONGODB_URI;
+export const secretKey = process.env.SECRET_KEY;
 if (!mongoDB) {
   console.error("URI string MongoDB is null");
   process.exit(1);

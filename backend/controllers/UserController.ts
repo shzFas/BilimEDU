@@ -2,8 +2,12 @@ import { Request, Response } from "express";
 import UsersModel, { IUsers } from "../models/Users";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { secretKey } from "..";
 
 export const register = async (req: Request, res: Response) => {
+  if (!secretKey) {
+    throw new Error("Secret key is not defined");
+  }
   try {
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
@@ -24,7 +28,7 @@ export const register = async (req: Request, res: Response) => {
       {
         _id: user._id,
       },
-      "secret123",
+      secretKey,
       {
         expiresIn: "30d",
       }
@@ -44,6 +48,9 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
+  if (!secretKey) {
+    throw new Error("Secret key is not defined");
+  }
   try {
     const user: IUsers | null = await UsersModel.findOne({
       email: req.body.email,
@@ -70,7 +77,7 @@ export const login = async (req: Request, res: Response) => {
       {
         _id: user._id,
       },
-      "secret123",
+      secretKey,
       {
         expiresIn: "30d",
       }
